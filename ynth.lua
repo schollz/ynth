@@ -1,7 +1,10 @@
 -- ynth
 
+engine.name = 'Thebangs2'
+
 graphics = include("lib/graphics") -- graphics library
 utils = include("lib/utils")
+
 
 state = {
 	available_pages={"adsr","mod"},
@@ -34,15 +37,30 @@ function enc(k,d)
 		if k==2 then 
 			state.selected_adsr = utils.sign_cycle(state.selected_adsr,d,0,4)
 		elseif k==3 and state.selected_adsr > 0 then 
-			state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/10,0,10)
+			if state.selected_adsr == 2 then 
+				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/100,0,1)
+			else
+				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/10,0,10)
+			end
 		end
 	end
-	print("update")
 	state.update_ui=true
 end
 
 function key(k,z)
-
+	if z == 1 then 
+		engine.stealMode(0)
+		engine.stealIndex(1)
+		engine.hz1(220)
+		engine.stealIndex(2)
+		engine.hz1(440)
+		clock.run(function()
+			clock.sleep(0.5)
+			engine.stealIndex(1)
+			engine.stopVoice()
+		end)
+	else
+	end
 end
 
 
@@ -54,7 +72,6 @@ function redraw()
   graphics:setup()
   graphics:rect(1, 33, 7, 33, state.available_pages[state.current_page]=="adsr")
   graphics:text_rotate(7, 62, "ADSR", -90, 0)
-  tab.print(state.adsr)
   local selected_adsr = state.selected_adsr
   if not state.available_pages[state.current_page]=="adsr" then 
   	selected_adsr = 0 
