@@ -7,16 +7,17 @@ Bangs2 {
 		arg hz1, mod1, hz2, mod2, env;
 	    var d = hz1;
 	    var b=(2..7).reciprocal;
-	    var c=SinOsc.ar(0,
-	      3**SinOscFB.ar(
+	    var dd= SinOscFB.ar(
 	            Duty.ar(
 	                b,
 	                0,
 	                Dseq([d,2/3*d,d,2/3*d,d,d,2/3*d,d,2/3*d,d,d*2-1,d,2/3*d,d,2/3*d,d,2/3*d,d,2/3*d+1,d],inf)
 	            ),
 	            mod1, // cool to vary this between 0 and 1
-	        )
-	     );
+	        );
+	    var c=SinOsc.ar(0,
+	      3**dd
+	    );
 	    ^MoogFF.ar(LeakDC.ar(Splay.ar(c+PitchShift.ar(c,SinOsc.kr(SinOsc.kr(1,add:1),rrand(0,1),0.5,1),b.reciprocal,1/d,1/d,b))),hz2,mod2)  ;
 	}
 

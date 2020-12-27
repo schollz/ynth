@@ -85,9 +85,8 @@ Thebangs2  {
 		fn = {
 			var syn;
 			syn = {
-				arg gate=1;
+				arg gate=1,mod1s=mod1;
 				var snd, perc, ender;
-
 				// perc = EnvGen.ar(Env.perc(attack, release), doneAction:Done.freeSelf);
 				ender = EnvGen.ar(
 					Env.new(
@@ -99,20 +98,16 @@ Thebangs2  {
 					doneAction:Done.freeSelf
 				);
 				// ender = EnvGen.ar(Env.asr(0, 1, 0.01), gate:gate, doneAction:Done.freeSelf);				
-				snd = Bangs2.perform(thebang, hz1, mod1, hz2, mod2, perc);
+				snd = Bangs2.perform(thebang, hz1, mod1s, hz2, mod2, perc);
 
 				Out.ar(0, Pan2.ar(snd * amp * ender, pan));
 			}.play(group);
 			syn
 		};
-
 		voicer.newVoice(fn);
 	}
 
 	doUpdateMod1 { 
-		postln("doUpdateMod1");
-		postln(mod1);
-		group.set(\mod1,mod1);
 		voicer.updateMod1(mod1);
 	}
 	

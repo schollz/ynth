@@ -125,9 +125,7 @@ OneshotVoicer2 {
 
 	updateMod1 { arg value; 
 		voices.do({ |v| 
-			postln("setting voice mod1");
-			postln(value);
-			v.set(\mod1, value); 
+			v.set(\mod1s, value); 
 		});
 	}
 	
