@@ -24,7 +24,7 @@ function Thebangs.add_additional_synth_params()
       type="option", id="algo", default=1,
       options=Thebangs.options.algoNames,
       action=function(value)
-	 engine.algoIndex(value)
+	     engine.algoIndex(value)
       end
    }
    

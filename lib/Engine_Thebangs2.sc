@@ -25,7 +25,7 @@ Engine_Thebangs2 : CroneEngine {
 		
 		// each of these commands simply calls a correspondingly-named setter,
 		// with a single float argument
-		["hz2", "mod1", "mod2", "amp", "pan", "attack", "release"].do({
+		["hz2", "mod1", "mod2", "amp", "pan", "attack", "decay", "sustain", "release"].do({
 			arg str;
 			this.addCommand(str, "f", { arg msg;
 				thebangs.perform((str++"_").asSymbol, msg[1]);
@@ -62,7 +62,7 @@ Engine_Thebangs2 : CroneEngine {
 			thebangs.voicer.stopAllVoices;
 		});
 
-		// stop all currently sustaining voices
+		// stop voice based on current stealIndex, to be used with stealMode=0
 		this.addCommand("stopVoice", "", { arg msg;
 			thebangs.voicer.stopVoice;
 		});
@@ -70,12 +70,12 @@ Engine_Thebangs2 : CroneEngine {
 		// set the max number of simultaneous voices
 		this.addCommand("maxVoices", "i", { arg msg;
 			thebangs.voicer.maxVoices = msg[1];
-		});
-		
+		});	
 
 	}
 
 	free {
+		thebangs.stopNote;
 		thebangs.freeAllNotes;
 	}
 }
