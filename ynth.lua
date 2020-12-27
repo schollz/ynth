@@ -41,6 +41,8 @@ function enc(k,d)
 		elseif k==3 and state.selected_adsr > 0 then 
 			if state.selected_adsr == 2 then 
 				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/100,0,1)
+			elseif state.selected_adsr == 4 then 
+				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] - d/10,0,10)
 			else
 				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/10,0,10)
 			end
