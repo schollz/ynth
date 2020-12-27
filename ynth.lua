@@ -8,11 +8,15 @@ soundengine = include("lib/soundengine")
 
 
 state = {
-	available_pages={"adsr","mod"},
-	current_page=1,
+	available_pages={"adsr","mods"},
+	current_page=2,
 	adsr={1,0.5,0.5,1},
-	selected_adsr=0,
+	adsr_selected=0,
+	mods={0,0},
+	mods_selected=1,
 	update_ui=false,
+	update_adsr=false,
+	update_mods=false,
 }
 
 function init()
@@ -46,6 +50,14 @@ function refresh(c)
 	if state.update_ui then
 		redraw()
 	end
+	if state.update_adsr then 
+		state.update_adsr=false
+		state.synth:set_adsr(state.adsr)
+	end
+	if state.update_mods then 
+		state.update_mods=false 
+		state.synth:set_mods(state.mods)
+	end
 end
 
 function enc(k,d)
@@ -53,16 +65,24 @@ function enc(k,d)
 		state.current_page = utils.sign_cycle(state.current_page,d,1,2)
 	elseif state.available_pages[state.current_page]=="adsr" then
 		if k==2 then 
-			state.selected_adsr = utils.sign_cycle(state.selected_adsr,d,0,4)
-		elseif k==3 and state.selected_adsr > 0 then 
-			if state.selected_adsr == 2 then 
-				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/100,0,1)
-			elseif state.selected_adsr == 4 then 
-				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] - d/10,0,10)
+			state.adsr_selected = utils.sign_cycle(state.adsr_selected,d,0,4)
+		elseif k==3 and state.adsr_selected > 0 then 
+			if state.adsr_selected == 2 then 
+				state.adsr[state.adsr_selected] = util.clamp(state.adsr[state.adsr_selected] + d/100,0,1)
+			elseif state.adsr_selected == 4 then 
+				state.adsr[state.adsr_selected] = util.clamp(state.adsr[state.adsr_selected] - d/10,0,10)
 			else
-				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/10,0,10)
+				state.adsr[state.adsr_selected] = util.clamp(state.adsr[state.adsr_selected] + d/10,0,10)
 			end
-			state.synth:set_adsr(state.adsr)
+			state.update_adsr=true
+		end
+	elseif state.available_pages[state.current_page]=="mods" then
+		if k==2 then 
+			state.mods_selected = utils.sign_cycle(state.mods_selected,d,0,2)
+			print(state.mods_selected)
+		elseif k==3 and state.mods_selected > 0 then 
+			state.mods[state.mods_selected] = util.clamp(state.mods[state.mods_selected] + d/100,0,1)
+			state.update_mods=true
 		end
 	end
 	state.update_ui=true
@@ -89,15 +109,19 @@ function redraw()
   graphics:setup()
   graphics:rect(1, 33, 7, 33, state.available_pages[state.current_page]=="adsr")
   graphics:text_rotate(7, 62, "ADSR", -90, 0)
-  local selected_adsr = state.selected_adsr
+  local adsr_selected = state.adsr_selected
   if not state.available_pages[state.current_page]=="adsr" then 
-  	selected_adsr = 0 
+  	adsr_selected = 0 
   end
-  graphics:adsr(state.adsr,selected_adsr)
-  graphics:rect(64, 33, 7, 33, state.available_pages[state.current_page]=="mod")
+  graphics:adsr(state.adsr,adsr_selected)
+  graphics:rect(64, 33, 7, 33, state.available_pages[state.current_page]=="mods")
   graphics:text_rotate(70, 62, "MOD", -90, 0)
-  graphics:text(74,48,"1: 1.0")
-  graphics:text(74,58,"2: 1.0")
+  local mods_selected = state.mods_selected
+  if not state.available_pages[state.current_page]=="mods" then 
+  	mods_selected = 0 
+  end
+  graphics:text(74,48,"1: "..state.mods[1],mods_selected == 0 or mods_selected == 1)
+  graphics:text(74,58,"2: "..state.mods[2],mods_selected == 0 or mods_selected == 2)
   graphics:teardown()
 end
 

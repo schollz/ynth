@@ -39,7 +39,7 @@ Thebangs2  {
 		// default parameter values
 		hz1 = 330;
 		hz2 = 10000;
-		mod1 = 0.5;
+		mod1 = 0.0;
 		mod2 = 0.0;
 
 		attack = 0.01;
@@ -73,7 +73,8 @@ Thebangs2  {
 	bang { arg hz;
 		var fn;
 
-		postln("bang!");
+		postln([hz1, mod1, hz2, mod2, amp, pan, attack, release]);
+		// postln("bang!");
 		/*
 		postln([hz1, mod1, hz2, mod2, amp, pan, attack, release]);
 		postln([server, group]);

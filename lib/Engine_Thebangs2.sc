@@ -22,10 +22,15 @@ Engine_Thebangs2 : CroneEngine {
 			thebangs.bang;
 		});
 
+		// add updaters to update live values
+		this.addCommand("mod1","f", { arg msg;
+			thebangs.mod1 = msg[1];
+			thebangs.voicer.updateMod1(msg[1]); // update current voices
+		});
 		
 		// each of these commands simply calls a correspondingly-named setter,
 		// with a single float argument
-		["hz2", "mod1", "mod2", "amp", "pan", "attack", "decay", "sustain", "release"].do({
+		["hz2", "mod2", "amp", "pan", "attack", "decay", "sustain", "release"].do({
 			arg str;
 			this.addCommand(str, "f", { arg msg;
 				thebangs.perform((str++"_").asSymbol, msg[1]);

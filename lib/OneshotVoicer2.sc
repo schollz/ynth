@@ -122,5 +122,13 @@ OneshotVoicer2 {
 	stopVoice {
 		this.stealVoiceIdx(stealIdx);
 	}
+
+	updateMod1 { arg value; 
+		voices.do({ |v| 
+			postln("setting voice mod1");
+			postln(value);
+			v.set(\mod1, value); 
+		});
+	}
 	
 }

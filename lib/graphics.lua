@@ -48,8 +48,12 @@ function graphics:circle(x, y, r, l)
   screen.fill()
 end
 
-function graphics:text(x, y, s, l)
-  screen.level(l or 15)
+function graphics:text(x, y, s, highlight)
+  if highlight then 
+    screen.level(15)
+  else
+    screen.level(1)
+  end
   screen.move(x, y)
   screen.text(s)
 end

@@ -68,7 +68,7 @@ function SoundEngine:set_adsr(adsr)
 	for i=1,4 do 
 		if adsr[i] ~= self.adsr[i] then 
 			self.adsr[i] = adsr[i]
-			print("updating "..i)
+			print("SoundEngine:set_adsr"..i..": "..self.adsr[i])
 			funs[i](self.adsr[i])
 		end
 	end
@@ -82,11 +82,14 @@ function SoundEngine:set_level(level)
 end
 
 function SoundEngine:set_mods(mods)
-	if mods then 
-		self.mods = mods 
+	local funs = {engine.mod1}
+	for i = 1,#funs do 
+		if mods[i] ~= self.mods[i] then 
+			self.mods[i] = mods[i]
+			print("SoundEngine:set_mods"..i..": "..self.mods[i])
+			funs[i](self.mods[i])
+		end
 	end
-	-- engine.mod1(self.mods[1])
-	-- engine.mod2(self.mods[2])
 end
 
 return SoundEngine
