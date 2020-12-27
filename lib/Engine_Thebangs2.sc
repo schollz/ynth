@@ -25,7 +25,8 @@ Engine_Thebangs2 : CroneEngine {
 		// add updaters to update live values
 		this.addCommand("mod1","f", { arg msg;
 			thebangs.mod1 = msg[1];
-			thebangs.voicer.updateMod1(msg[1]); // update current voices
+			// thebangs.voicer.updateMod1(msg[1]); // update current voices
+			thebangs.doUpdateMod1;
 		});
 		
 		// each of these commands simply calls a correspondingly-named setter,

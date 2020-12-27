@@ -109,6 +109,12 @@ Thebangs2  {
 		voicer.newVoice(fn);
 	}
 
+	doUpdateMod1 { 
+		postln("doUpdateMod1");
+		postln(mod1);
+		group.set(\mod1,mod1);
+		voicer.updateMod1(mod1);
+	}
 	
 	stopNote { 
 		voicer.stopCurrentVoice;
