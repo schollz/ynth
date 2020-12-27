@@ -4,7 +4,7 @@ engine.name = 'Thebangs2'
 
 graphics = include("lib/graphics") -- graphics library
 utils = include("lib/utils")
-soundengine = includes("lib/soundengine")
+soundengine = include("lib/soundengine")
 
 
 state = {
@@ -23,7 +23,7 @@ function init()
 	refresher.event = refresh
 	refresher:start()
 	state.update_ui=true
-	state.synth = soundengine.init()
+	state.synth = soundengine:init()
 end
 
 function refresh(c)
@@ -51,7 +51,12 @@ end
 
 function key(k,z)
 	if z == 1 then 
-		state.synth:note_on(60)
+		if k==2 then 
+			state.synth:note_on(60)
+			print("note on!")
+		else 
+			state.synth:note_off(60)
+		end
 	else
 	end
 end
