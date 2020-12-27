@@ -87,12 +87,20 @@ Thebangs2  {
 				arg gate=1;
 				var snd, perc, ender;
 
-				perc = EnvGen.ar(Env.perc(attack, release), doneAction:Done.freeSelf);
-				ender = EnvGen.ar(Env.adsr(attack, decay, sustain, release), gate:gate, doneAction:Done.freeSelf);
-				
+				// perc = EnvGen.ar(Env.perc(attack, release), doneAction:Done.freeSelf);
+				ender = EnvGen.ar(
+					Env.new(
+						levels: [0,1,sustain,0],
+						times: [attack,decay,release],
+						releaseNode: 2
+					),
+					gate: gate,
+					doneAction:Done.freeSelf
+				);
+				// ender = EnvGen.ar(Env.asr(0, 1, 0.01), gate:gate, doneAction:Done.freeSelf);				
 				snd = Bangs2.perform(thebang, hz1, mod1, hz2, mod2, perc);
 
-				Out.ar(0, Pan2.ar(snd * perc * amp * ender, pan));
+				Out.ar(0, Pan2.ar(snd * amp * ender, pan));
 			}.play(group);
 			syn
 		};

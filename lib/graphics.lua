@@ -94,7 +94,6 @@ function graphics:curve_in_box(bbox,highlight,x1, y1, x2, y2, x3, y3)
     screen.line_width(1)
   end
   screen.move(x1,y1)
-  print(f)
   screen.curve(x1, y1, x2, y2, x3, y3)
   screen:stroke ()
 end

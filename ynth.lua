@@ -44,21 +44,22 @@ function enc(k,d)
 			else
 				state.adsr[state.selected_adsr] = util.clamp(state.adsr[state.selected_adsr] + d/10,0,10)
 			end
+			state.synth:set_adsr(state.adsr)
 		end
 	end
 	state.update_ui=true
 end
 
 function key(k,z)
-	if z == 1 then 
-		if k==2 then 
-			state.synth:note_on(60)
-			print("note on!")
-		else 
-			state.synth:note_off(60)
-		end
-	else
+	note = 60
+	if k==3 then 
+		note = 54
 	end
+	if z ==1 then 
+		state.synth:note_on(note)
+	else
+		state.synth:note_off(note)
+	end		
 end
 
 

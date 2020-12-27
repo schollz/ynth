@@ -5,8 +5,9 @@ engine.name = 'Thebangs2'
 currentEngine = "" -- global current engine
 
 local SoundEngine = {
-	adsr = {1,1,0.5,1},
-	mods = {0,0},
+	level = 0.5,
+	adsr = {3,1,0.5,1},
+	mods = {1.0,1.0},
 	engine_name = "square",
 	current_notes = {},
 	index_start = 1
@@ -18,9 +19,9 @@ function SoundEngine:init(o)
     setmetatable(o, self)
     self.__index = self
 
-	-- self.index_start = math.random(1,1000) -- random index in case overlapping sounds
-    self:update()
-
+	self.index_start = math.random(1,1000) -- random index in case overlapping sounds
+	self:set_level(self.level)
+	self:set_adsr(self.adsr)
     -- engine update
 	engine.stealMode(0) -- set to static steal-mode 
 	return o
@@ -39,9 +40,11 @@ end
 
 function SoundEngine:note_on(midinote)
 	if self.current_notes[midinote] ~= nil then 
-		do return end 
+		self:note_off(midinote)
 	end
-	self.current_notes[midinote] = #self.current_notes+self.index_start -- new index
+	if self.current_notes[midinote] == nil then 
+		self.current_notes[midinote] = #self.current_notes+self.index_start -- new index
+	end
 	self:set_engine()
 	print("stealing note "..self.current_notes[midinote])
 	engine.stealIndex(self.current_notes[midinote]) -- change to new index
@@ -53,32 +56,37 @@ function SoundEngine:note_off(midinote)
 		do return end 
 	end
 	self:set_engine()
+	print("note_off "..midinote)
 	engine.stealIndex(self.current_notes[midinote]) -- stealing current index removes note
+	engine.stopVoice()
 	self.current_notes[midinote] = nil 
 end
 
-function SoundEngine:update()
-	self:set_adsr()
-	self:set_mods()
+function SoundEngine:set_adsr(adsr) 
+	print("SoundEngine:set_adsr")
+	local funs = {engine.attack,engine.decay,engine.sustain,engine.release}
+	for i=1,4 do 
+		if adsr[i] ~= self.adsr[i] then 
+			self.adsr[i] = adsr[i]
+			print("updating "..i)
+			funs[i](self.adsr[i])
+		end
+	end
 end
 
-function SoundEngine:set_adsr(adsr) 
-	if adsr then 
-		self.adsr = adsr
+function SoundEngine:set_level(level)
+	if level ~= self.level then 
+		self.level = level
+		engine.level(self.level)
 	end
-	engine.amp(1.0)
-	engine.attack(self.adsr[1])
-	engine.decay(self.adsr[2])
-	engine.sustain(self.adsr[3])
-	engine.release(self.adsr[4])
 end
 
 function SoundEngine:set_mods(mods)
 	if mods then 
 		self.mods = mods 
 	end
-	engine.mod1(self.mods[1])
-	engine.mod1(self.mods[2])
+	-- engine.mod1(self.mods[1])
+	-- engine.mod2(self.mods[2])
 end
 
 return SoundEngine

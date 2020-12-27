@@ -95,6 +95,7 @@ OneshotVoicer2 {
 		postln("stealing: " ++ idx ++ " (" ++ idxClamp ++ ")");
 		
 		if (v.isNil.not, {
+			postln("setting gate to 0");
 			if (v.isPlaying, {
 				// cause the stolen voice to stop "real soon"
 				v.set(\gate, 0);
