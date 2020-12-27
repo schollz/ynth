@@ -8,7 +8,7 @@ local SoundEngine = {
 	level = 0.5,
 	adsr = {3,1,0.5,1},
 	mods = {1.0,1.0},
-	engine_name = "id_sparkle",
+	engine_name = "sinfb",
 	current_notes = {},
 	index_start = 1
 }
