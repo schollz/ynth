@@ -17,13 +17,29 @@ state = {
 
 function init()
 	print("starting")
+
+	-- refresh screen 
 	refresher = metro.init()
 	refresher.time = 0.1
 	refresher.count=-1
 	refresher.event = refresh
 	refresher:start()
+
+	-- midi events 
+	midi_signal_in=midi.connect()
+	midi_signal_in.event=on_midi_event
+  
 	state.update_ui=true
 	state.synth = soundengine:init()
+end
+
+function on_midi_event(data)
+  msg=midi.to_msg(data)
+  if msg.type=='note_on' then
+		state.synth:note_on(msg.note)
+  elseif msg.type=='note_off' then
+		state.synth:note_off(msg.note)
+  end
 end
 
 function refresh(c)
